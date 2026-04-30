@@ -10,7 +10,8 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "engine:start": "node src/workers/generationWorker.mjs"
+    "engine:start": "node src/workers/generationWorker.mjs",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "next": "14.2.3",
