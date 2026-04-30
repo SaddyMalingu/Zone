@@ -8,7 +8,6 @@ import type { ContentFeedItem } from "@/types";
 const PAGE_SIZE = 24;
 
 export default function ContentFeed() {
-export default function ContentFeed() {
   const [items, setItems] = useState<ContentFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
