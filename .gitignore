@@ -1,0 +1,11 @@
+*.env.local
+*.env
+node_modules/
+.next/
+out/
+dist/
+zone.db
+zone.db-journal
+*.log
+.DS_Store
+Thumbs.db

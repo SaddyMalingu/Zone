@@ -1,0 +1,59 @@
+// This is your Prisma schema file.
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Content {
+  id             String   @id @default(uuid())
+  type           String   // "image" | "video"
+  url            String
+  prompt         String
+  negativePrompt String?
+  provider       String   // "huggingface" | "replicate"
+  model          String
+  width          Int?
+  height         Int?
+  duration       Float?   // video duration in seconds
+  tags           String   // JSON array stored as string
+  status         String   @default("completed") // "queued" | "generating" | "completed" | "failed"
+  metadata       String?  // JSON blob
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([type])
+  @@index([createdAt])
+  @@index([status])
+}
+
+model GenerationJob {
+  id            String    @id @default(uuid())
+  prompt        String
+  negativePrompt String?
+  contentType   String    // "image" | "video"
+  provider      String
+  model         String
+  status        String    @default("queued")
+  error         String?
+  contentId     String?   // FK to Content once complete
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model EngineState {
+  id              String   @id @default("singleton")
+  isRunning       Boolean  @default(false)
+  totalGenerated  Int      @default(0)
+  lastGeneratedAt DateTime?
+  updatedAt       DateTime @updatedAt
+}
