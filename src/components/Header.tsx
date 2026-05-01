@@ -10,7 +10,7 @@ export default function Header() {
             Z
           </div>
           <span className="text-zone-text font-semibold tracking-widest text-lg">
-            ZONE
+            Zone
           </span>
           <span className="text-zone-muted text-xs font-mono hidden sm:block">
             / AI Content Portal
