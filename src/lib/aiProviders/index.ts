@@ -4,7 +4,7 @@
  */
 
 import type { AIProvider, ContentType, GeneratedContent } from "@/types";
-import { generateImageHuggingFace } from "./huggingface";
+import { generateImageHuggingFace, generateVideoHuggingFace } from "./huggingface";
 import { generateWithReplicate } from "./replicate";
 
 export type GenerateParams = {
@@ -14,7 +14,6 @@ export type GenerateParams = {
   contentType?: ContentType;
 };
 
-export async function generateContent(
   params: GenerateParams
 ): Promise<Omit<GeneratedContent, "id" | "createdAt" | "status" | "tags">> {
   const { prompt, negativePrompt, provider, contentType = "image" } = params;
@@ -22,6 +21,18 @@ export async function generateContent(
   // Auto-select provider based on availability
   const resolvedProvider = provider ?? selectProvider(contentType);
 
+  if (contentType === "video") {
+    switch (resolvedProvider) {
+      case "huggingface":
+        return generateVideoHuggingFace(prompt, negativePrompt);
+      case "replicate":
+        return generateWithReplicate(prompt, negativePrompt);
+      default:
+        throw new Error(`Unknown provider: ${resolvedProvider}`);
+    }
+  }
+
+  // Default: image
   switch (resolvedProvider) {
     case "huggingface":
       return generateImageHuggingFace(prompt, negativePrompt);
